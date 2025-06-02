@@ -19,11 +19,6 @@ jobs:
       - name: Build Next.js (for Cypress to run on)
         run: npm run build
 
-      - name: Start Next.js app in background
-        run: |
-          npm run start &
-          sleep 5
-
       - name: Run Cypress E2E tests (headless)
         uses: cypress-io/github-action@v6
         with:
