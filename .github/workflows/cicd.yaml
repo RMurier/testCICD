@@ -26,6 +26,12 @@ jobs:
           wait-on: 'http://localhost:3000'
           browser: chrome
 
+      - name: Download arficat (video)
+        uses: actions/upload-artifact@v4
+        with: 
+          name: cypress-video
+          path: cypress/video 
+
   build:
     needs: e2e-test
     runs-on: ubuntu-latest
