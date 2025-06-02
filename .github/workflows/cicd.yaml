@@ -29,8 +29,8 @@ jobs:
       - name: Download arficat (video)
         uses: actions/upload-artifact@v4
         with: 
-          name: cypress-video
-          path: cypress/video 
+          name: cypress-videos
+          path: cypress/videos
 
   build:
     needs: e2e-test
