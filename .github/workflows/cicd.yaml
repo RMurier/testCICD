@@ -2,7 +2,50 @@ name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: [push]
 jobs:
-  Explore-GitHub-Actions:
+  e2e-test:
     runs-on: ubuntu-latest
     steps:
-      - run: npm run e2e:headless
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Next.js (for Cypress to run on)
+        run: npm run build
+
+      - name: Start Next.js app in background
+        run: |
+          npm run start &
+          sleep 5
+
+      - name: Run Cypress E2E tests (headless)
+        uses: cypress-io/github-action@v6
+        with:
+          start: npm run start
+          wait-on: 'http://localhost:3000'
+          browser: chrome
+          headless: true
+
+  build:
+    needs: e2e-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Next.js app
+        run: npm run build
